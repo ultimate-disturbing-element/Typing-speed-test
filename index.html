@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Typing Test</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .maindiv {
+        background-color: #3498db;
+        height: 100vh;
+        position: relative;
+        width: 100%;
+      }
+      .centerdiv {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+
+      textarea {
+        background-color: #444;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+        border-radius: 10px 10px 0 0;
+        border: 20px solid #34459e;
+        color: white;
+        font-size: 1.3rem;
+      }
+      h1 {
+        color: white;
+        text-transform: capitalize;
+      }
+      h2 {
+        text-align: center;
+      }
+
+      button {
+        padding: 10px 20px;
+        border-radius: 20px;
+        background: #ecf0f1;
+        font-size: 1rem;
+        border: 5px solid #2980b9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="maindiv">
+      <div class="centerdiv">
+        <h1>Test your typing speed</h1>
+        <br />
+        <h3 id="msg"></h3>
+        <br />
+        <textarea cols="100" rows="10" id="typewords"></textarea>
+        <button id="btn">Start</button>
+      </div>
+    </div>
+    <script>
+      const setofwords = [
+        "JavaScript is high-level, often just-in-time compiled, and multi-paradigm",
+        "JavaScript is the world's most popular programming language. JavaScript is the programming language of the Web. JavaScript is easy to learn.",
+        "JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions.",
+      ];
+
+      const msg = document.getElementById("msg");
+      const typewords = document.getElementById("typewords");
+      const btn = document.getElementById("btn");
+
+      let startTime, endTime;
+      const playGame = () => {
+        let randomnumber = Math.floor(Math.random() * setofwords.length);
+        msg.innerText = setofwords[randomnumber];
+
+        let date = new Date();
+        startTime = date.getTime();
+        btn.innerText = "Done";
+      };
+
+      const endPlay = () => {
+        let date = new Date();
+        endTime = date.getTime();
+        let totalTime = (endTime - startTime) / 1000;
+        let totalStr = typewords.value;
+        let wordcount = wordCounter(totalStr);
+        let speed = Math.round((wordcount / totalTime) * 60);
+
+        let finalmsg = "you typed total at " + speed + " words per minutes";
+        finalmsg += compareWords(msg.innerText, totalStr);
+        msg.innerText = finalmsg;
+      };
+      const wordCounter = (str) => {
+        let response = str.split(" ").length;
+        return response;
+      };
+      const compareWords = (str1, str2) => {
+        let word1 = str1.split(" ");
+        let word2 = str2.split(" ");
+        let count = 0;
+        word1.forEach(function (item, index) {
+          if (item == word2[index]) {
+            count++;
+          }
+        });
+
+        let errorWords = word1.length - count;
+        return (
+          count +
+          " correct out of " +
+          word1.length +
+          " words and the total number of error are " +
+          errorWords +
+          " ."
+        );
+      };
+
+      btn.addEventListener("click", function () {
+        if (this.innerText == "Start") {
+          typewords.disabled = false;
+          playGame();
+        } else if (this.innerText == "Done") {
+          typewords.disabled = true;
+          btn.innerText = "Start";
+          endPlay();
+        }
+      });
+    </script>
+  </body>
+</html>
